@@ -73,9 +73,15 @@ let g:airline#extensions#tabline#formatter = 'unique_tail'
 
 " Turn on code completion; turn off if using another source
 let g:ale_completion_enabled = 1
-let b:ale_fixers = {
-\ 'javascript': ['prettier', 'eslint'],
+
+" Override filetypes for specific paths so linters work
+au BufRead,BufNewFile **/Ansible**.yml set filetype=yaml.ansible
+au BufRead,BufNewFile **/ansible**.yml set filetype=yaml.ansible
+
+" Enabled fixers
+let g:ale_fixers = {
 \ 'yaml': ['prettier'],
+\ 'javascript': ['prettier'],
 \ 'json': ['prettier'],
 \ 'sh': ['shfmt'],
 \ 'python': ['autopep8'],
