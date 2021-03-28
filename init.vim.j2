@@ -1,6 +1,11 @@
+
+"ALE and coc integration, needs to be before plugins
+let g:ale_disable_lsp = 1
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugins                                                                     "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 call plug#begin()
 Plug 'preservim/nerdtree'      		" File navigation in a left pane
 Plug 'vim-airline/vim-airline'		" Nicer bottom status line with git branch
@@ -149,3 +154,21 @@ set updatetime=100
 highlight GitGutterAdd    guifg=#009900 ctermfg=2
 highlight GitGutterChange guifg=#bbbb00  ctermfg=3
 highlight GitGutterDelete guifg=#ff2222  ctermfg=1
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" coc                                                                         "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" use <tab> for trigger completion and navigate to the next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
+
+"""""""""""""""""""""
