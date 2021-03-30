@@ -112,6 +112,24 @@ noremap <Leader>w :w !sudo tee % > /dev/null
 " Prettify JSON with jq
 noremap <Leader>j :%!jq '.'
 
+" TableFormat using vim-markdown
+noremap <Leader>t :TableFormat
+
+" ALEFix
+noremap <Leader>f :ALEFix
+
+" Set spelling on
+noremap <Leader>s :set nospell
+
+" Turn spelling off
+noremap <Leader>s :set spell spelllang=en_gb
+
+" windodiff this
+noremap <Leader>d :windo diffthis
+
+" windodiff this
+noremap <Leader>e :diffoff
+
 " Next buffer
 noremap <Leader>n :bn
 
