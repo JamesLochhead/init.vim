@@ -2,9 +2,9 @@
 "ALE and coc integration, needs to be before plugins
 let g:ale_disable_lsp = 1
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugins                                                                     "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" -----------------------------------------------
+" Plugins
+" -----------------------------------------------
 
 call plug#begin()
 Plug 'preservim/nerdtree'      		" File navigation in a left pane
@@ -24,29 +24,33 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}  " Code completion
 Plug 'pearofducks/ansible-vim'		" Ansible syntax highlighting
 Plug 'koalaman/shellcheck'		" Bash/sh linter
 Plug 'altercation/vim-colors-solarized' " Solarized theme
+Plug 'romainl/flattened'                " Alternative to Solarized
 call plug#end()
 
 " moll/vim-bbye allows buffers to be closed without closing windows, hence
 " keeping vim open when a buffer needs to be closed. The command is :Bd.
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" General options                                                             "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" -----------------------------------------------
+" General options
+" -----------------------------------------------
+
 set number relativenumber		" Turn on line numbers
 set mouse=a				" Turn on mouse mode
-colorscheme solarized			" Set the color scheme
-set termguicolors			" Enable True Color
+colorscheme flattened_light 		" Set the color scheme
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" File type specific                                                          "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Causing incorrect colorus in Byobu:
+"set termguicolors			" Enable True Color
+
+" -----------------------------------------------
+" File-type specific
+" -----------------------------------------------
 
 " Sane tabs for YAML
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" NERDTree                                                                    "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" -----------------------------------------------
+" NERDTree
+" -----------------------------------------------
 
 " Shortcut for NERDTree
 map <C-n> :NERDTreeToggle<CR>
@@ -66,9 +70,9 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-airline                                                                 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" -----------------------------------------------
+" vim-airline
+" -----------------------------------------------
 
 " Show a line for tabs and buffers
 let g:airline#extensions#tabline#enabled = 1
@@ -78,9 +82,9 @@ let g:airline_theme='minimalist'
 
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ALE                                                                         "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" -----------------------------------------------
+" ALE
+" -----------------------------------------------
 
 " Turn on code completion; turn off if using another source
 " 0 = off
@@ -99,9 +103,9 @@ let g:ale_fixers = {
 \ 'python': ['autopep8'],
 \}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Shortcuts                                                                   "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" -----------------------------------------------
+" Shortcuts
+" -----------------------------------------------
 
 " Leader = ,
 let mapleader = ","
@@ -119,7 +123,7 @@ noremap <Leader>t :TableFormat
 noremap <Leader>f :ALEFix
 
 " Set spelling on
-noremap <Leader>s :set nospell
+noremap <Leader>a :set nospell
 
 " Turn spelling off
 noremap <Leader>s :set spell spelllang=en_gb
@@ -136,9 +140,9 @@ noremap <Leader>n :bn
 " Previous buffer
 noremap <Leader>p :bp
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-markdown                                                                "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" -----------------------------------------------
+" vim-markdown
+" -----------------------------------------------
 
 " Disable vim markdown code folding
 let g:vim_markdown_folding_disabled = 1
@@ -161,9 +165,9 @@ let g:vim_markdown_auto_insert_bullets = 0
 " Disable quote concealing in JSON files
 let g:vim_json_conceal=0
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-gitgutter                                                               "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" -----------------------------------------------
+" vim-gitgutter
+" -----------------------------------------------
 
 " Make signs appear faster
 set updatetime=100
@@ -173,10 +177,9 @@ highlight GitGutterAdd    guifg=#009900 ctermfg=2
 highlight GitGutterChange guifg=#bbbb00  ctermfg=3
 highlight GitGutterDelete guifg=#ff2222  ctermfg=1
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" coc                                                                         "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" -----------------------------------------------
+" coc
+" -----------------------------------------------
 
 " use <tab> for trigger completion and navigate to the next complete item
 function! s:check_back_space() abort
@@ -189,4 +192,3 @@ inoremap <silent><expr> <Tab>
       \ <SID>check_back_space() ? "\<Tab>" :
       \ coc#refresh()
 
-"""""""""""""""""""""
