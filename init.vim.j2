@@ -11,7 +11,6 @@ Plug 'preservim/nerdtree'      		" File navigation in a left pane
 Plug 'vim-airline/vim-airline'		" Nicer bottom status line with git branch
 Plug 'vim-airline/vim-airline-themes'   " Themes for the above
 Plug 'dense-analysis/ale'		" Async linting, code completion, etc
-Plug 'thaerkh/vim-indentguides'		" Indent guides for code blocks
 Plug 'moll/vim-bbye'			" Enables some commands that improve NERDTree
 Plug 'plasticboy/vim-markdown'		" Vim markdown syntax highlighting
 Plug 'godlygeek/tabular'		" Need for vim-markdown table formatting
@@ -21,11 +20,16 @@ Plug 'airblade/vim-gitgutter'		" See changes that have been made to a file
 Plug 'tpope/vim-surround'		" Shortcuts for surrounding text with characters
 Plug 'tpope/vim-commentary'		" Shortcuts for commenting out code
 Plug 'neoclide/coc.nvim', {'branch': 'release'}  " Code completion
-Plug 'pearofducks/ansible-vim'		" Ansible syntax highlighting
-Plug 'koalaman/shellcheck'		" Bash/sh linter
-Plug 'altercation/vim-colors-solarized' " Solarized theme
-Plug 'romainl/flattened'                " Alternative to Solarized
+Plug 'pearofducks/ansible-vim'                   " Ansible syntax highlighting
+Plug 'koalaman/shellcheck'                       " Bash/sh linter
+Plug 'altercation/vim-colors-solarized'          " Solarized theme
+Plug 'romainl/flattened'                         " Alternative to Solarized
+Plug 'thaerkh/vim-indentguides'                  " Indent guides for code blocks
+Plug 'liuchengxu/vista.vim'                      " Python navigation pane. Requries ctags.
 call plug#end()
+
+" Not currently used:
+"Plug 'tmhedberg/SimpylFold'             " Python code folding
 
 " moll/vim-bbye allows buffers to be closed without closing windows, hence
 " keeping vim open when a buffer needs to be closed. The command is :Bd.
@@ -34,19 +38,32 @@ call plug#end()
 " General options
 " -----------------------------------------------
 
-set number relativenumber		" Turn on line numbers
-set mouse=a				" Turn on mouse mode
-colorscheme flattened_light 		" Set the color scheme
+set number relativenumber                      " Turn on line numbers
+set mouse=a                                    " Turn on mouse mode
+colorscheme flattened_light                    " Set the color scheme
+set nowrap                                     " No word wrapping
+"set autoread                                  " Reload all changed files automatically
+set colorcolumn=80,100                         " Column highlighting
+"set textwidth=80                              " Set the width for auto wrapping
 
-" Causing incorrect colorus in Byobu:
-"set termguicolors			" Enable True Color
+" Causing incorrect colours in Byobu:
+"set termguicolors                             " Enable True Color
 
 " -----------------------------------------------
 " File-type specific
 " -----------------------------------------------
 
+" Enable the filetype plugin for extra vim config files
+filetype plugin on
+
 " Sane tabs for YAML
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+" foldmethod=syntax just for Python; necessary for docstring folding
+autocmd FileType python setlocal foldenable foldmethod=syntax
+
+" Set textwidth by file type
+" au BufRead,BufNewFile *.md setlocal textwidth=80
 
 " -----------------------------------------------
 " NERDTree
@@ -93,6 +110,8 @@ let g:ale_completion_enabled = 0
 " Override filetypes for specific paths so linters work
 au BufRead,BufNewFile **/Ansible**.yml set filetype=yaml.ansible
 au BufRead,BufNewFile **/ansible**.yml set filetype=yaml.ansible
+au BufRead,BufNewFile **/cloudformation**.yml set filetype=yaml.cloudformation
+au BufRead,BufNewFile **/Cloudformation**.yml set filetype=yaml.cloudformation
 
 " Enabled fixers
 let g:ale_fixers = {
@@ -100,7 +119,7 @@ let g:ale_fixers = {
 \ 'javascript': ['prettier'],
 \ 'json': ['prettier'],
 \ 'sh': ['shfmt'],
-\ 'python': ['autopep8'],
+\ 'python': ['yapf'],
 \}
 
 " -----------------------------------------------
@@ -128,17 +147,35 @@ noremap <Leader>a :set nospell
 " Turn spelling off
 noremap <Leader>s :set spell spelllang=en_gb
 
+" Toggle word wrapping
+noremap <Leader>w :set wrap!
+
+" Open init.vim in a new window
+noremap <Leader>i :vert new ~/.config/nvim/init.vim
+
 " windodiff this
 noremap <Leader>d :windo diffthis
 
 " windodiff this
 noremap <Leader>e :diffoff
 
+" Current column highlight
+noremap <Leader>c :set cursorcolumn!
+
+" Check if a file has been modified
+noremap <Leader>x :checktime
+
+" Current line highlight
+noremap <Leader>l :set cursorline!
+
 " Next buffer
 noremap <Leader>n :bn
 
 " Previous buffer
 noremap <Leader>p :bp
+
+" Re-format visually highlighted blocks to textwidth
+noremap <Leader>g gq
 
 " -----------------------------------------------
 " vim-markdown
@@ -192,3 +229,21 @@ inoremap <silent><expr> <Tab>
       \ <SID>check_back_space() ? "\<Tab>" :
       \ coc#refresh()
 
+" -----------------------------------------------
+" MacOS clipboard
+" -----------------------------------------------
+"
+" Nvim has no direct connection to the system clipboard. Instead it is
+" accessible through a |provider| which transparently uses shell commands for
+" communicating with the clipboard.
+"
+" Clipboard access is implicitly enabled if any of the following clipboard
+" tools are found in your $PATH.
+"
+" - xclip
+" - xsel (newer alternative to xclip)
+" - pbcopy/pbpaste (Mac OS X)
+" - lemonade (for SSH) https://github.com/pocke/lemonade
+" - doitclient (for SSH) http://www.chiark.greenend.org.uk/~sgtatham/doit/
+"
+" Source: https://github.com/neovim/neovim/issues/1696
